@@ -1,0 +1,57 @@
+Intitulé du poste : Architecte Solutions IA
+Lieu : Télétravail ou hybride (Préférence : basé(e) aux États-Unis)
+Département : Ingénierie IA / Solutions
+Niveau de séniorité : Senior
+
+À propos du poste
+Nous recherchons un(e) Architecte Solutions IA stratégique et opérationnel(le), capable de faire le lien entre les besoins métier et la mise en œuvre technique. Vous collaborerez avec des équipes transverses pour concevoir, proposer et superviser le développement de solutions alimentées par l’IA, en mettant l’accent sur des applications concrètes générant un impact mesurable pour l’entreprise.
+
+Responsabilités principales
+
+Concevoir et architecturer des systèmes IA évolutifs exploitant les LLMs, bases de données vectorielles et le prompt engineering.
+
+Collaborer avec les parties prenantes pour traduire les besoins métier en spécifications techniques.
+
+Mener des appels de découverte technique et des sessions de conception orientées client.
+
+Développer et maintenir des architectures, modèles, templates et implémentations de référence réutilisables.
+
+Conseiller sur le choix des modèles (OpenAI, Claude, Gemini, etc.), la stratégie de données (RAG, embeddings, etc.) et les méthodes de déploiement (self-hosted, serverless).
+
+Superviser l’intégration avec des API, outils tiers et plateformes d’automatisation comme n8n.
+
+Se tenir informé(e) des tendances IA pour garantir des solutions conformes aux meilleures pratiques.
+
+Qualifications minimales
+
+3+ années d'expérience en IA/ML, automatisation ou développement backend.
+
+Excellente compréhension des écosystèmes LLM (OpenAI, Anthropic, Mistral, Cohere, etc.).
+
+Maîtrise d’outils tels que n8n, LangChain ou des frameworks d’agents personnalisés.
+
+Expérience avec les bases de données vectorielles (Pinecone, Weaviate, Qdrant) et les techniques de récupération d’information (RAG).
+
+Connaissance du prompt engineering, du tool/function calling et de l’architecture système.
+
+Excellentes compétences en communication et en documentation.
+
+Qualifications préférées
+
+Expérience préalable dans la livraison de solutions IA à des clients ou au sein d’une agence.
+
+Compréhension de la confidentialité, de la sécurité et des considérations éthiques liées à l’IA.
+
+Expérience avec des workflows IA basés sur Python ou JavaScript.
+
+Bonne compréhension des workflows métier et de la manière dont l’IA peut les optimiser.
+
+Exposition antérieure à des plateformes low-code ou à des intégrations personnalisées.
+
+Ce qui caractérise la réussite dans ce poste :
+
+Avoir livré au moins deux projets complets d’agents IA ou d’automatisation.
+
+Avoir conçu des solutions évolutives adoptées et utilisées avec succès par des équipes ou des clients.
+
+Avoir proposé des architectures permettant de réduire le temps de livraison ou la complexité opérationnelle.

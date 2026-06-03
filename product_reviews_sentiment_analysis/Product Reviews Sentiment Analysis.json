@@ -1,0 +1,1323 @@
+{
+  "name": "Product Reviews Sentiment Analysis",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -512,
+        576
+      ],
+      "id": "b49c25cc-363c-4531-9b46-18fd38b70ffa",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"{{ $json[0].label }}\": {{ $json[0].score }},\n\"{{ $json[1].label }}\":{{ $json[1].score }},\n\"{{ $json[2].label }}\":{{ $json[2].score }},\n\"{{ $json[3].label }}\":{{ $json[3].score }},\n\"{{ $json[4].label }}\":{{ $json[4].score }},\n\"reviewId\":\"{{ $('Loop Over Items').item.json.reviewId }}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        288,
+        576
+      ],
+      "id": "980efb0e-ae4f-4d44-bb71-a235ad029d19",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"{{ $json[0].label }}\":{{ $json[0].score }},\n  \"{{ $json[1].label }}\":{{ $json[1].score }},\n  \"{{ $json[2].label }}\":{{ $json[2].score }},\n  \"{{ $json[3].label }}\":{{ $json[3].score }},\n  \"{{ $json[4].label }}\":{{ $json[4].score }},\n\"reviewId\":\"{{ $('Loop Over Items').item.json.reviewId }}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        464,
+        832
+      ],
+      "id": "9858e44f-109c-415f-bdc7-2b184fbf8ac9",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "fieldsToSummarize": {
+          "values": [
+            {
+              "aggregation": "average",
+              "field": "Very Positive"
+            },
+            {
+              "aggregation": "average",
+              "field": "Positive"
+            },
+            {
+              "aggregation": "average",
+              "field": "Neutral"
+            },
+            {
+              "aggregation": "average",
+              "field": "Negative"
+            },
+            {
+              "aggregation": "average",
+              "field": "Very Negative"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.summarize",
+      "typeVersion": 1.1,
+      "position": [
+        624,
+        832
+      ],
+      "id": "1b327002-6a25-44b7-baa0-2eff689e9fd5",
+      "name": "Summarize"
+    },
+    {
+      "parameters": {
+        "content": "## Amazon review scrapping",
+        "height": 208,
+        "width": 320
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -144,
+        256
+      ],
+      "typeVersion": 1,
+      "id": "32711d3b-b6fb-48d1-b78c-b0090e1ca88f",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Amazon review data",
+        "height": 208,
+        "width": 384,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        256,
+        256
+      ],
+      "typeVersion": 1,
+      "id": "1cf39cc5-1565-4479-a9c2-4939977bc05c",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## short review analysis",
+        "height": 208,
+        "width": 736,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        48,
+        528
+      ],
+      "typeVersion": 1,
+      "id": "fbe23313-47da-48b7-878e-dfaf330745c5",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## long review analysis",
+        "height": 224,
+        "width": 1056,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        48,
+        768
+      ],
+      "typeVersion": 1,
+      "id": "a9c8c791-4bf7-4960-9ba0-a7166d738685",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -528,
+        320
+      ],
+      "id": "f7ab9efd-5e2a-4ea4-93e8-7037f45cd843",
+      "name": "When chat message received",
+      "webhookId": "c824d802-edec-4cf4-be3f-b6b7c299f572"
+    },
+    {
+      "parameters": {
+        "content": "## Amazon URL Decoding",
+        "height": 208,
+        "width": 352,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -560,
+        256
+      ],
+      "typeVersion": 1,
+      "id": "b5b1dee3-439e-4310-a680-b587a2bda288",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "operation": "Run actor and get dataset",
+        "actorSource": "store",
+        "actorId": {
+          "__rl": true,
+          "value": "ZebkvH3nVOrafqr5T",
+          "mode": "list",
+          "cachedResultName": "Amazon Reviews Scraper (axesso_data/amazon-reviews-scraper)",
+          "cachedResultUrl": "https://console.apify.com/actors/ZebkvH3nVOrafqr5T/input"
+        },
+        "customBody": "={\n    \"input\": [\n        {\n            \"asin\": \"{{ $('Extract ASIN from Amazon URL').item.json.asin }}\",\n            \"domainCode\": \"com\",\n            \"sortBy\": \"recent\",\n            \"maxPages\": 50,\n            \"filterByStar\": \"\",\n            \"filterByKeyword\": \"\",\n            \"reviewerType\": \"all_reviews\",\n            \"formatType\": \"current_format\",\n            \"mediaType\": \"all_contents\"\n        }\n    ]\n} "
+      },
+      "type": "@apify/n8n-nodes-apify.apify",
+      "typeVersion": 1,
+      "position": [
+        -32,
+        320
+      ],
+      "id": "e6981c4a-fa90-4575-8484-39db8eaf3974",
+      "name": "Run an Actor and get dataset",
+      "credentials": {
+        "apifyApi": {
+          "id": "uPtmQycGwpTy267l",
+          "name": "Apify account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Sentiment Summary\n",
+        "height": 192,
+        "width": 352,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1104,
+        512
+      ],
+      "typeVersion": 1,
+      "id": "57536f05-7fe9-48a9-93e0-d0a0b82c66d8",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "language": "python",
+        "pythonCode": "import re\n\n# Récupération de l'URL depuis l'input\n# input_data est automatiquement fourni par n8n comme une liste de dictionnaires\n# Exemple: [{'url': 'https://www.amazon.com/dp/B0FLJMX2N6'}]\n\noutput = []\n\nfor item in items:  # items est la variable par défaut qui contient tous les inputs\n    url = item.get('json', {}).get('chatInput')  # on prend la clé 'url' du json\n    asin = None\n    if url:\n        match = re.search(r\"/dp/([A-Z0-9]{10})\", url)\n        if match:\n            asin = match.group(1)\n    output.append({\n        'json': {\n            'url': url,\n            'asin': asin\n        }\n    })\n\nreturn output\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -352,
+        320
+      ],
+      "id": "06e32243-516a-4a37-9717-4f9ff7016438",
+      "name": "Extract ASIN from Amazon URL"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fd6ca83d-2dbc-4167-8eb4-1e1697be8301",
+              "name": "reviewId",
+              "value": "={{ $json.reviewId }}",
+              "type": "string"
+            },
+            {
+              "id": "83c4091f-e968-4f30-8d12-2743ecba9579",
+              "name": "userName",
+              "value": "={{ $json.userName }}",
+              "type": "string"
+            },
+            {
+              "id": "4792f269-d551-4601-8fe0-4c833a86c9b5",
+              "name": "title",
+              "value": "={{ $json.title }}",
+              "type": "string"
+            },
+            {
+              "id": "0dedd3fa-7a30-495c-bda2-0c0f2929b87f",
+              "name": "text",
+              "value": "={{ $json.text }}",
+              "type": "string"
+            },
+            {
+              "id": "4c5a4633-0f91-47dd-86f6-1cd3d0ee3651",
+              "name": "date",
+              "value": "={{ $json.date }}",
+              "type": "string"
+            },
+            {
+              "id": "ffe37014-1945-47c5-a797-b26fa6cf73c0",
+              "name": "rating",
+              "value": "={{ $json.rating }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        304,
+        320
+      ],
+      "id": "82aef11c-ceee-4db4-8e8d-7760f61a5f86",
+      "name": "Format scraped review fields"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "<VOTRE_GOOGLE_SHEET_ID>",
+          "mode": "list",
+          "cachedResultName": "n8n_Product Reviews Sentiment Analysis (Amazon)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/10bxCHq-a_X5Vyf3Y8q8Amom-zo6stDN4hol3EjtUWTE/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 2904843,
+          "mode": "list",
+          "cachedResultName": "customers review",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/10bxCHq-a_X5Vyf3Y8q8Amom-zo6stDN4hol3EjtUWTE/edit#gid=2904843"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "asin": "={{ $('Run an Actor and get dataset').item.json.asin }}",
+            "productTitle": "={{ $('Run an Actor and get dataset').item.json.productTitle }}",
+            "userName\r": "={{ $json.userName }}",
+            "title": "={{ $json.title }}",
+            "text": "={{ $json.text }}",
+            "date": "={{ $json.date }}",
+            "rating": "={{ $json.rating }}",
+            "reviewId": "={{ $json.reviewId }}"
+          },
+          "matchingColumns": [
+            "reviewId"
+          ],
+          "schema": [
+            {
+              "id": "asin",
+              "displayName": "asin",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "productTitle",
+              "displayName": "productTitle",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "reviewId",
+              "displayName": "reviewId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "userName\r",
+              "displayName": "userName\r",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "title",
+              "displayName": "title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "text",
+              "displayName": "text",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "date",
+              "displayName": "date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "rating",
+              "displayName": "rating",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        496,
+        320
+      ],
+      "id": "0424484f-3719-4fc6-b172-a64c8a19b925",
+      "name": "Save raw reviews to main sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "moOuSLQVPKsiDkHA",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json[\"text\"].length }}",
+                    "rightValue": 480,
+                    "operator": {
+                      "type": "number",
+                      "operation": "lt"
+                    },
+                    "id": "5294b742-ff23-4b18-8787-88cc5ac10994"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "785a3faa-4094-4c24-8364-5b9787de3117",
+                    "leftValue": "={{ $json[\"text\"].length }}",
+                    "rightValue": 480,
+                    "operator": {
+                      "type": "number",
+                      "operation": "gt"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "59d492d5-ecc1-4d04-bdef-89ce9be0a926",
+                    "leftValue": "={{ $json.text }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "empty",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -224,
+        576
+      ],
+      "id": "152054ab-424f-4e58-8eef-21f5c4b98276",
+      "name": "Check review"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://router.huggingface.co/hf-inference/models/tabularisai/multilingual-sentiment-analysis",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer <VOTRE_TOKEN_HUGGING_FACE>"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "inputs",
+              "value": "={{ $json.text }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        112,
+        576
+      ],
+      "id": "27cae24b-14d4-4d7f-839b-a9e4038f8948",
+      "name": "Sentiment analysis API"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "<VOTRE_GOOGLE_SHEET_ID>",
+          "mode": "list",
+          "cachedResultName": "n8n_Product Reviews Sentiment Analysis (Amazon)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/10bxCHq-a_X5Vyf3Y8q8Amom-zo6stDN4hol3EjtUWTE/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 2904843,
+          "mode": "list",
+          "cachedResultName": "customers review",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/10bxCHq-a_X5Vyf3Y8q8Amom-zo6stDN4hol3EjtUWTE/edit#gid=2904843"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "reviewId": "={{ $json.reviewId }}",
+            "Very Positive": "={{ $json['Very Positive'] }}",
+            "Positive": "={{ $json.Positive }}",
+            "Neutral": "={{ $json.Neutral }}",
+            "Negative": "={{ $json.Negative }}",
+            "Very Negative": "={{ $json['Very Negative'] }}"
+          },
+          "matchingColumns": [
+            "reviewId"
+          ],
+          "schema": [
+            {
+              "id": "asin",
+              "displayName": "asin",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "productTitle",
+              "displayName": "productTitle",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "reviewId",
+              "displayName": "reviewId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "userName\r",
+              "displayName": "userName\r",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "title",
+              "displayName": "title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "text",
+              "displayName": "text",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "date",
+              "displayName": "date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "rating",
+              "displayName": "rating",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Very Positive",
+              "displayName": "Very Positive",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Positive",
+              "displayName": "Positive",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Neutral",
+              "displayName": "Neutral",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Negative",
+              "displayName": "Negative",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Very Negative",
+              "displayName": "Very Negative",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        624,
+        576
+      ],
+      "id": "49a4b48e-5d67-4dcc-9044-e725c2ebd24a",
+      "name": "Save analyzed review to sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "moOuSLQVPKsiDkHA",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "language": "python",
+        "pythonCode": "# Constante pour la taille maximale d'un chunk\nMAX_CHARS = 480\n\ndef split_text_into_chunks(text, max_chars=MAX_CHARS):\n    \"\"\"\n    Divise un texte long en plusieurs morceaux sans couper les mots.\n    Chaque morceau ne dépasse pas max_chars caractères.\n    \"\"\"\n    words = text.split()\n    chunks = []\n    current_chunk = \"\"\n\n    for word in words:\n        # +1 pour l'espace entre les mots\n        if len(current_chunk) + len(word) + 1 <= max_chars:\n            current_chunk += (\" \" if current_chunk else \"\") + word\n        else:\n            chunks.append(current_chunk)\n            current_chunk = word\n\n    if current_chunk:\n        chunks.append(current_chunk)\n\n    return chunks\n\n\n#  Ici on suppose qu'il y a un seul item dans `items`\ntext = items[0].get(\"json\", {}).get(\"text\", \"\")\n\nif not text:\n    return []  # Rien à faire s'il n'y a pas de texte\n\nchunks = split_text_into_chunks(text)\n\n#  Construire la sortie pour n8n\noutput = [{\"json\": {\"chunk\": chunk, \"original_text\": text}} for chunk in chunks]\n\nreturn output\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        112,
+        832
+      ],
+      "id": "3d064e27-f26d-48ad-8e75-8f58330a0f41",
+      "name": "Split long review"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://router.huggingface.co/hf-inference/models/tabularisai/multilingual-sentiment-analysis",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer <VOTRE_TOKEN_HUGGING_FACE>"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "inputs",
+              "value": "={{ $json.chunk }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        288,
+        832
+      ],
+      "id": "17c00bf4-9e8c-4a23-9470-3c7130a8827c",
+      "name": "Sentiment analysis API1"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "<VOTRE_GOOGLE_SHEET_ID>",
+          "mode": "list",
+          "cachedResultName": "n8n_Product Reviews Sentiment Analysis (Amazon)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/10bxCHq-a_X5Vyf3Y8q8Amom-zo6stDN4hol3EjtUWTE/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 2904843,
+          "mode": "list",
+          "cachedResultName": "customers review",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/10bxCHq-a_X5Vyf3Y8q8Amom-zo6stDN4hol3EjtUWTE/edit#gid=2904843"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "reviewId": "={{ $('Check review').item.json.reviewId }}",
+            "Very Positive": "={{ $json.average_Very_Positive }}",
+            "Positive": "={{ $json.average_Positive }}",
+            "Neutral": "={{ $json.average_Neutral }}",
+            "Negative": "={{ $json.average_Negative }}",
+            "Very Negative": "={{ $json.average_Very_Negative }}"
+          },
+          "matchingColumns": [
+            "reviewId"
+          ],
+          "schema": [
+            {
+              "id": "asin",
+              "displayName": "asin",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "productTitle",
+              "displayName": "productTitle",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "reviewId",
+              "displayName": "reviewId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "userName\r",
+              "displayName": "userName\r",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "title",
+              "displayName": "title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "text",
+              "displayName": "text",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "date",
+              "displayName": "date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "rating",
+              "displayName": "rating",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Very Positive",
+              "displayName": "Very Positive",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Positive",
+              "displayName": "Positive",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Neutral",
+              "displayName": "Neutral",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Negative",
+              "displayName": "Negative",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Very Negative",
+              "displayName": "Very Negative",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        944,
+        832
+      ],
+      "id": "ee5343dd-a29c-4c9a-bdfd-c1c6009e4c15",
+      "name": "Save analyzed review to sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "moOuSLQVPKsiDkHA",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldsToSummarize": {
+          "values": [
+            {
+              "aggregation": "average",
+              "field": "Very Positive"
+            },
+            {
+              "aggregation": "average",
+              "field": "Positive"
+            },
+            {
+              "aggregation": "average",
+              "field": "Neutral"
+            },
+            {
+              "aggregation": "average",
+              "field": "Negative"
+            },
+            {
+              "aggregation": "average",
+              "field": "Very Negative"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.summarize",
+      "typeVersion": 1.1,
+      "position": [
+        -1072,
+        576
+      ],
+      "id": "69d9fff0-29a0-4b1b-8b21-9959f0cd4f74",
+      "name": "Sentiment Averages"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "<VOTRE_GOOGLE_SHEET_ID>",
+          "mode": "list",
+          "cachedResultName": "n8n_Product Reviews Sentiment Analysis (Amazon)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/10bxCHq-a_X5Vyf3Y8q8Amom-zo6stDN4hol3EjtUWTE/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 2004759888,
+          "mode": "list",
+          "cachedResultName": "Sentiment Summary",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/10bxCHq-a_X5Vyf3Y8q8Amom-zo6stDN4hol3EjtUWTE/edit#gid=2004759888"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "average_Very_Positive",
+              "displayName": "average_Very_Positive",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "average_Positive",
+              "displayName": "average_Positive",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "average_Neutral",
+              "displayName": "average_Neutral",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "average_Negative",
+              "displayName": "average_Negative",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "average_Very_Negative",
+              "displayName": "average_Very_Negative",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -880,
+        576
+      ],
+      "id": "b0623b8e-fc70-4479-9be7-a767535092c1",
+      "name": "Save Sentiment Averages",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "moOuSLQVPKsiDkHA",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 0.5
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        448,
+        576
+      ],
+      "id": "1d389567-098c-425e-a7ce-0cdeb1a19e8a",
+      "name": "Wait",
+      "webhookId": "3b725fa9-b15e-4be6-92fc-64fea2bdf1d7"
+    },
+    {
+      "parameters": {
+        "amount": 0.5
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        784,
+        832
+      ],
+      "id": "e22cb138-676a-4457-a724-da18ab64ad61",
+      "name": "Wait1",
+      "webhookId": "3b725fa9-b15e-4be6-92fc-64fea2bdf1d7"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Sentiment Averages",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check review",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "Summarize",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Summarize": {
+      "main": [
+        [
+          {
+            "node": "Wait1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "Extract ASIN from Amazon URL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Run an Actor and get dataset": {
+      "main": [
+        [
+          {
+            "node": "Format scraped review fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract ASIN from Amazon URL": {
+      "main": [
+        [
+          {
+            "node": "Run an Actor and get dataset",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format scraped review fields": {
+      "main": [
+        [
+          {
+            "node": "Save raw reviews to main sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save raw reviews to main sheet": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check review": {
+      "main": [
+        [
+          {
+            "node": "Sentiment analysis API",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Split long review",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sentiment analysis API": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save analyzed review to sheet": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split long review": {
+      "main": [
+        [
+          {
+            "node": "Sentiment analysis API1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sentiment analysis API1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save analyzed review to sheet1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sentiment Averages": {
+      "main": [
+        [
+          {
+            "node": "Save Sentiment Averages",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Save analyzed review to sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait1": {
+      "main": [
+        [
+          {
+            "node": "Save analyzed review to sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "1e3c05e2-c77c-44ab-b12d-d5255b95ec83",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "8f024fef56f7931dbedca62852bab47a2e1dd51e2e69a94547a58e441bb5489e"
+  },
+  "id": "DFo10cD3GyrKDAPK",
+  "tags": [
+    {
+      "updatedAt": "2025-11-11T14:00:15.288Z",
+      "createdAt": "2025-11-11T14:00:15.288Z",
+      "id": "2E1H7jip6Vv8MmET",
+      "name": "EJE"
+    }
+  ]
+}

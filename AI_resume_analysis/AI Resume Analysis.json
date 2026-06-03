@@ -1,0 +1,1414 @@
+{
+  "name": "AI Resume Analysis",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "simple": false,
+        "filters": {},
+        "options": {
+          "downloadAttachments": true
+        }
+      },
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -432,
+        48
+      ],
+      "id": "cba7bcfa-5e3a-491c-970a-beb9505b0c78",
+      "name": "Gmail Trigger",
+      "alwaysOutputData": false,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "4lcHU9zXp7WvPPbL",
+          "name": "working"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "x-ai/grok-4.1-fast",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        2000,
+        176
+      ],
+      "id": "f6afc3c8-9c6e-4f11-8dce-5cd252318de5",
+      "name": "OpenRouter Chat Model",
+      "credentials": {
+        "openRouterApi": {
+          "id": "SzXFeijzQNmMiVW4",
+          "name": "deep"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        1808,
+        16
+      ],
+      "id": "3e3bc483-fb43-4c68-a7df-2675dad3b574",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n\t\"output\": \"Oui ou Non\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        2160,
+        176
+      ],
+      "id": "21538d88-2b32-40cf-abfc-386e602035ea",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "inputDataFieldName": "attachment_0",
+        "name": "={{ $json.from.value[0].name }}_CV",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "<VOTRE_DOSSIER_GOOGLE_DRIVE_ID>",
+          "mode": "list",
+          "cachedResultName": "Resumes",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/19R0UrUiEexU5ZgBcsgbtd5oApt5wz3Vp"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -240,
+        48
+      ],
+      "id": "542e1872-56f6-4b20-a452-e5857dd18617",
+      "name": "Upload file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "ufg5xXZffG8Mu4B8",
+          "name": "working"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "63594b63-218e-4c71-9384-03b4ac8fcee4",
+              "name": "token",
+              "value": "={{ $('Authenticate').item.json.token }}",
+              "type": "string"
+            },
+            {
+              "id": "394efa52-9e71-4709-a728-99c5687f3fc4",
+              "name": "server",
+              "value": "={{ $json.server }}",
+              "type": "string"
+            },
+            {
+              "id": "e12df845-f287-4480-8e96-4a22dd58d919",
+              "name": "task",
+              "value": "={{ $json.task }}",
+              "type": "string"
+            },
+            {
+              "id": "938cd903-c5ce-4481-a931-cc09dcc1e701",
+              "name": "file id",
+              "value": "={{ $('Upload file').item.json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "fdfbf5dc-ac0c-408b-8059-57ca437b6d47",
+              "name": "url",
+              "value": "={{ $('Upload file').item.json.webViewLink }}",
+              "type": "string"
+            },
+            {
+              "id": "18c9f9cb-e6fa-45ca-b300-411b29626402",
+              "name": "id_mere",
+              "value": "1",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        816,
+        112
+      ],
+      "id": "a7fd7244-fa83-495d-a30e-3ba93fcb0028",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "fieldsToMatchString": "id_mere",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1040,
+        272
+      ],
+      "id": "88b3388c-3323-483e-a054-57b92ca9717b",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b2921a7d-8b07-4289-a32a-c86159b84562",
+              "name": "id_mere",
+              "value": "1",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -32,
+        288
+      ],
+      "id": "245dd4c0-6138-4cd0-b626-7c77b9b3a6ec",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $('Upload file').item.json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1136,
+        16
+      ],
+      "id": "b602def0-b4da-4174-a448-42782874ef88",
+      "name": "Download file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "ufg5xXZffG8Mu4B8",
+          "name": "working"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "x-ai/grok-4.1-fast",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        3040,
+        192
+      ],
+      "id": "4909473f-fb65-4f41-ad64-dd2f8b7845ab",
+      "name": "OpenRouter Chat Model1",
+      "credentials": {
+        "openRouterApi": {
+          "id": "SzXFeijzQNmMiVW4",
+          "name": "deep"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"annees_experience_totale\": \"nombre d'années d'expérience extraites du CV (laisser vide si non trouvable)\",\n\n  \"forces_du_candidat\": \"string décrivant les forces, compétences pertinentes et expériences alignées\",\n  \"faiblesses_du_candidat\": \"string décrivant les manques, incohérences ou points faibles\",\n\n  \"competences_cles_extraites_et_comparees\": \n    {\n      \"competences\": \"nom de la compétence requise par la description du poste\",\n      \"presence_dans_cv\": \"Oui | Non\",\n      \"niveau_candidat\": \"Expert | Avancé | Intermédiaire | Débutant | '' (laisser vide si non trouvé)\"\n    },\n\n  \"facteur_de_risque\": {\n    \"niveau\": \"Faible | Moyen | Élevé\",\n    \"details\": \"string expliquant les risques potentiels liés au recrutement\"\n  },\n\n  \"facteur_de_recompense\": {\n    \"niveau\": \"Faible | Moyen | Élevé\",\n    \"details\": \"string décrivant la valeur que le candidat peut apporter dans le meilleur scénario\"\n  },\n\n  \"potentiel_d_evolution\": \"string évaluant la capacité du candidat à progresser et monter en compétences\",\n  \"pertinence_des_experiences\": \"string expliquant si les expériences passées sont directement transférables au poste\",\n\n  \"note_adequation_globale\": 0,\n  \"justification_de_la_note\": \"string expliquant clairement et factuellement pourquoi cette note a été attribuée\"\n}\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        3184,
+        192
+      ],
+      "id": "41499565-d846-442f-8ea2-f33383f6df99",
+      "name": "Structured Output Parser1"
+    },
+    {
+      "parameters": {
+        "text": "={{ $('Extract from File').item.json.text }}",
+        "attributes": {
+          "attributes": [
+            {
+              "name": "Nom complet",
+              "description": "le nom complet du candidat",
+              "required": true
+            },
+            {
+              "name": "email",
+              "description": "address mail du candidat",
+              "required": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.informationExtractor",
+      "typeVersion": 1.2,
+      "position": [
+        3040,
+        -304
+      ],
+      "id": "2de7caa4-48d3-48ce-97e2-44a8e1a04318",
+      "name": "Information Extractor"
+    },
+    {
+      "parameters": {
+        "model": "x-ai/grok-4.1-fast",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        3040,
+        -144
+      ],
+      "id": "33a8cbd4-dc59-4bf1-9c12-9b9dbec95869",
+      "name": "OpenRouter Chat Model2",
+      "credentials": {
+        "openRouterApi": {
+          "id": "SzXFeijzQNmMiVW4",
+          "name": "deep"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "fieldsToMatchString": "date",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        3648,
+        -16
+      ],
+      "id": "f8427594-d23c-4c3c-b2e7-6bf7e185217a",
+      "name": "Merge1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4fae3484-e300-423b-9ae2-3c8f01ccabcc",
+              "name": "nom complet",
+              "value": "={{ $json.output['Nom complet'] }}",
+              "type": "string"
+            },
+            {
+              "id": "79a370e6-785d-4d07-b0ee-221704384ee7",
+              "name": "email",
+              "value": "={{ $json.output.email }}",
+              "type": "string"
+            },
+            {
+              "id": "5b723e2c-c51a-40b2-92aa-38ee774a7509",
+              "name": "date",
+              "value": "={{ $('Gmail Trigger').item.json.headers.date }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3344,
+        -304
+      ],
+      "id": "a307459b-f3e4-4f51-bc1a-5cd41d19bade",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3ed69c7c-78d1-4de8-a369-f94351370ca4",
+              "name": "annees_experience_totale",
+              "value": "={{ $json.output.annees_experience_totale }}",
+              "type": "string"
+            },
+            {
+              "id": "02c101b9-315d-4085-a47e-917f717622c2",
+              "name": "forces_du_candidat",
+              "value": "={{ $json.output.forces_du_candidat }}",
+              "type": "string"
+            },
+            {
+              "id": "8c442014-0fad-467b-aa78-2279e5a28d47",
+              "name": "faiblesses_du_candidat",
+              "value": "={{ $json.output.faiblesses_du_candidat }}",
+              "type": "string"
+            },
+            {
+              "id": "bddc919c-d05e-41be-bc2a-a92f7e2a45b6",
+              "name": "facteur_de_risque",
+              "value": "=niveau : {{ $json.output.facteur_de_risque.niveau }}\ndétails : {{ $json.output.facteur_de_risque.details }}",
+              "type": "string"
+            },
+            {
+              "id": "8f7928c4-28e6-4e94-8672-2c4f646e6d82",
+              "name": "facteur_de_recompense",
+              "value": "=niveau : {{ $json.output.facteur_de_recompense.niveau }}\ndétails : {{ $json.output.facteur_de_recompense.details }}",
+              "type": "string"
+            },
+            {
+              "id": "d30604ef-f07b-4ba3-8289-6d5764f17362",
+              "name": "potentiel_d_evolution",
+              "value": "={{ $json.output.potentiel_d_evolution }}",
+              "type": "string"
+            },
+            {
+              "id": "81da757f-7c5a-49bf-ab13-1658736ef945",
+              "name": "pertinence_des_experiences",
+              "value": "={{ $json.output.pertinence_des_experiences }}",
+              "type": "string"
+            },
+            {
+              "id": "171f97a3-8e0c-4943-b5d9-3fc2327088bf",
+              "name": "note_adequation_globale",
+              "value": "={{ $json.output.note_adequation_globale }}",
+              "type": "number"
+            },
+            {
+              "id": "c28aa260-3e82-4c13-8734-9c4c5374ed65",
+              "name": "justification_de_la_note",
+              "value": "={{ $json.output.justification_de_la_note }}",
+              "type": "string"
+            },
+            {
+              "id": "93b46340-de68-4abb-8a4d-1e49238dd108",
+              "name": "date",
+              "value": "={{ $('Gmail Trigger').item.json.headers.date }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3344,
+        0
+      ],
+      "id": "9efdae37-4bb9-4760-8cb8-88be9205af8c",
+      "name": "Edit Fields3"
+    },
+    {
+      "parameters": {
+        "content": "# Email Reception & File Intake\n",
+        "height": 272,
+        "width": 544
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -464,
+        -64
+      ],
+      "typeVersion": 1,
+      "id": "e6e428b9-42b6-4c97-a89c-897da657c1f5",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "# File Type Detection & Pre-Processing\n",
+        "height": 496,
+        "width": 1520,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        192,
+        -64
+      ],
+      "typeVersion": 1,
+      "id": "15e604dd-73bd-4891-9463-50d3e6ff5dbc",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "# CV Validation\n",
+        "height": 384,
+        "width": 640,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1792,
+        -64
+      ],
+      "typeVersion": 1,
+      "id": "7d82d314-7fbd-4c18-b459-97a9d42a914f",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "# Job Description\n",
+        "height": 256,
+        "width": 384,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2528,
+        -80
+      ],
+      "typeVersion": 1,
+      "id": "022bda5e-7998-4aab-a93d-bb79ace2748a",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "# AI-Powered CV Analysis\n",
+        "height": 752,
+        "width": 544,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2992,
+        -416
+      ],
+      "typeVersion": 1,
+      "id": "10eb9d91-aa30-4ea6-a04b-66038a57c59e",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "4929508c-3ecb-4a0e-8a41-88a81b1d393b",
+              "leftValue": "={{ $json.error }}",
+              "rightValue": "This operation expects the node's input data to contain a binary file 'attachment_0', but none was found [item 0]",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -32,
+        48
+      ],
+      "id": "39b53e53-1b89-470a-bfc2-f1c6d42f7a44",
+      "name": "If fichiers"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.mimeType }}",
+                    "rightValue": "=application/pdf",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "1f3f1ec1-2d1a-483f-98b3-c18a876008c1"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "pdf"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "9593a7ce-fa20-4311-91e7-fd4849b46e51",
+                    "leftValue": "={{ $json.mimeType }}",
+                    "rightValue": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "word"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        240,
+        32
+      ],
+      "id": "b00481f1-777d-4118-b92e-6f450a615e70",
+      "name": "Format detection"
+    },
+    {
+      "parameters": {
+        "url": "https://api.ilovepdf.com/v1/start/officepdf",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer  {{ $json.token }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "tool",
+              "value": "officepdf"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        640,
+        112
+      ],
+      "id": "b473a44a-f2e5-4d9f-adfc-2958998f9f15",
+      "name": "Get Server & Task ID"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.ilovepdf.com/v1/auth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"public_key\": \"<VOTRE_CLE_PUBLIQUE_ILOVEPDF>\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        464,
+        112
+      ],
+      "id": "ddd0aeda-4859-482f-809f-f1dc2c1a17d7",
+      "name": "Authenticate"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://{{ $json.server }}/v1/upload",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer  {{ $json.token }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "task",
+              "value": "={{ $json.task }}"
+            },
+            {
+              "parameterType": "formBinaryData",
+              "name": "file",
+              "inputDataFieldName": "attachment_0"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1216,
+        272
+      ],
+      "id": "c9427358-ec87-4460-b2ef-b786a9c6f5b6",
+      "name": "Upload file1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://{{ $('Edit Fields').item.json.server }}/v1/process",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer  {{ $('Edit Fields').item.json.token }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"task\": \"{{ $('Edit Fields').item.json.task }}\",\n  \"tool\": \"officepdf\",\n  \"files\": [\n    {\n      \"server_filename\": \"{{ $json.server_filename }}\",\n      \"filename\": \"{{ $json['name'] || 'input.pdf' }}\"\n    }\n  ]\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1392,
+        272
+      ],
+      "id": "dfda7b13-eac4-438f-8e4f-ee93c79cbb49",
+      "name": "Process files"
+    },
+    {
+      "parameters": {
+        "url": "=https://{{ $('Edit Fields').item.json.server }}/v1/download/{{ $('Edit Fields').item.json.task }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer  {{ $('Edit Fields').item.json.token }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1568,
+        272
+      ],
+      "id": "7644f3a6-5b4f-4c6a-a725-22f785a075bd",
+      "name": "Download output files"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Analyse ce mail et ses pièces jointes (texte extrait) : \n{{ $('Gmail Trigger').item.json.headers.subject }}\nCorps : {{ $('Gmail Trigger').item.json.text }}\nfile text : {{ $json.text }}\nCe mail contient-il un CV ou une candidature \nrepond juste par \"oui\" ou \"non\"\n",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "Tu es un assistant spécialisé en recrutement. \nTa tâche est d’analyser le contenu d’un mail et de déterminer s’il contient un CV ou une candidature. \nSi le mail contient un CV, réponds “Oui”. Sinon, réponds “Non”.\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        2000,
+        16
+      ],
+      "id": "3dc5d55a-a9d2-4b19-bfde-2c92698a5cc3",
+      "name": "CV detection"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "60aae5ac-2313-4945-ac01-2618af71df24",
+              "leftValue": "={{ $json.output }}",
+              "rightValue": "Oui",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2304,
+        16
+      ],
+      "id": "350a193b-e8c7-4274-bc4e-4706b705a424",
+      "name": "if CV"
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "<VOTRE_FICHIER_DESCRIPTION_POSTE_ID>",
+          "mode": "list",
+          "cachedResultName": "description du poste.txt",
+          "cachedResultUrl": "https://drive.google.com/file/d/14yen39JrOP-Jv4lj5VM3WLZ54EHzZQOf/view?usp=drivesdk"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        2560,
+        0
+      ],
+      "id": "1507f3dd-5440-49da-a27f-59e56fdbf4ce",
+      "name": "Download job description",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "ufg5xXZffG8Mu4B8",
+          "name": "working"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "text",
+        "destinationKey": "description du poste",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        2768,
+        0
+      ],
+      "id": "6dd7b6c9-63b9-4b75-9682-8b0bf4041e6d",
+      "name": "Extract text"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=cv du condidat\n{{ $('Extract from File').item.json.text }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=Aperçu\nVous êtes un expert en recrutement hautement qualifié, capable d’évaluer des candidats pour tout type de poste (technique, administratif, commercial, gestion, ingénierie, etc.). Vous recevrez une description de poste et un CV de candidat. Votre tâche est d’analyser le CV en fonction de la description de poste et de produire un rapport de présélection complet et structuré.\n\nConcentrez-vous sur le niveau d’adéquation du candidat avec :\n- les compétences clés requises,\n- les responsabilités principales du poste,\n- le profil idéal recherché,\n- la pertinence réelle de son expérience professionnelle,\n- la cohérence de son parcours et de ses motivations.\n\nVotre analyse doit être exclusivement basée sur les informations présentes dans le CV et la description de poste. N’émettez aucune hypothèse non justifiée par les documents fournis.\n\n## Format de sortie\nVotre sortie doit respecter exactement le format suivant :\n\nForces du candidat :\nListez les forces, compétences pertinentes, expériences alignées et atouts majeurs du candidat. Soyez précis et factuel.\n\nFaiblesses du candidat :\nListez les manques, décalages, incohérences, ou points faibles par rapport aux exigences du poste.\n\n\nFacteur de Risque :\n- Attribuez un niveau de risque (Faible / Moyen / Élevé)  \n- Décrivez les risques potentiels liés à son recrutement (ex : manque de compétence critique, instabilité professionnelle, faible expérience pertinente…).\n\nFacteur de Récompense :\n- Attribuez un niveau de récompense (Faible / Moyen / Élevé)  \n- Décrivez la valeur que le candidat pourrait apporter dans le meilleur scénario. \n\nPotentiel d’Évolution :\nÉvaluez la capacité du candidat à progresser, à monter en compétences ou à prendre davantage de responsabilités.\n\nPertinence des Expériences :\nExpliquez si les expériences passées du candidat sont directement transférables au poste proposé.\n\nNote d’Adéquation Globale (0–10) :\nAttribuez une note entière entre 0 (très faible match) et 10 (match parfait).\n\nJustification de la Note :\nExpliquez clairement, de manière structurée, pourquoi cette note a été attribuée, en vous appuyant uniquement sur des éléments concrets issus du CV et de la description du poste.\n\n## Description du Poste  \n{{ $json['description du poste'] }}\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        3040,
+        0
+      ],
+      "id": "f7f0161d-7ef8-4b32-9086-a61d2084268e",
+      "name": "CV analysis"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "<VOTRE_GOOGLE_SHEET_ID>",
+          "mode": "list",
+          "cachedResultName": "Condidats",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ZoQhVOZm1517nmCwIDWMPZ6e6KVyDDn2ex1k8-hblxU/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Feuille 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ZoQhVOZm1517nmCwIDWMPZ6e6KVyDDn2ex1k8-hblxU/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "email": "={{ $json.email }}",
+            "CV": "={{ $('Upload file').item.json.webViewLink }}",
+            "Date": "={{ $json.date }}",
+            "Nom complet": "={{ $json['nom complet'] }}",
+            "Années d’expérience totale": "={{ $json.annees_experience_totale }}",
+            "forces du candidat": "={{ $json.forces_du_candidat }}",
+            "faiblesses du candidat": "={{ $json.faiblesses_du_candidat }}",
+            "facteur de risque": "={{ $json.facteur_de_risque }}",
+            "facteur de recompense": "={{ $json.facteur_de_recompense }}",
+            "potentiel d'évolution": "={{ $json.potentiel_d_evolution }}",
+            "pertinence des experiences": "={{ $json.pertinence_des_experiences }}",
+            "note adequation globale": "={{ $json.note_adequation_globale }}",
+            "justification de la note": "={{ $json.justification_de_la_note }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Nom complet",
+              "displayName": "Nom complet",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "CV",
+              "displayName": "CV",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Années d’expérience totale",
+              "displayName": "Années d’expérience totale",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "forces du candidat",
+              "displayName": "forces du candidat",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "faiblesses du candidat",
+              "displayName": "faiblesses du candidat",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "facteur de risque",
+              "displayName": "facteur de risque",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "facteur de recompense",
+              "displayName": "facteur de recompense",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "potentiel d'évolution",
+              "displayName": "potentiel d'évolution",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "pertinence des experiences",
+              "displayName": "pertinence des experiences",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "note adequation globale",
+              "displayName": "note adequation globale",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "justification de la note",
+              "displayName": "justification de la note",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        3872,
+        -16
+      ],
+      "id": "bcab9ca9-8fb1-4d4e-8b7b-80cd26fbc51d",
+      "name": "Adding candidate",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "moOuSLQVPKsiDkHA",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Gmail Trigger": {
+      "main": [
+        [
+          {
+            "node": "Upload file",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "CV detection",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "CV detection",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "CV detection",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload file": {
+      "main": [
+        [
+          {
+            "node": "If fichiers",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Upload file1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Download file": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "CV analysis",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser1": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "CV analysis",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Information Extractor",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Information Extractor": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields3": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "Adding candidate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If fichiers": {
+      "main": [
+        [
+          {
+            "node": "Format detection",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Format detection": {
+      "main": [
+        [
+          {
+            "node": "Download file",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Authenticate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Server & Task ID": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Authenticate": {
+      "main": [
+        [
+          {
+            "node": "Get Server & Task ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload file1": {
+      "main": [
+        [
+          {
+            "node": "Process files",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Process files": {
+      "main": [
+        [
+          {
+            "node": "Download output files",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download output files": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CV detection": {
+      "main": [
+        [
+          {
+            "node": "if CV",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "if CV": {
+      "main": [
+        [
+          {
+            "node": "Download job description",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download job description": {
+      "main": [
+        [
+          {
+            "node": "Extract text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract text": {
+      "main": [
+        [
+          {
+            "node": "CV analysis",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Information Extractor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CV analysis": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Adding candidate": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "dda38eab-1629-434e-81e4-6a8623be955b",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "8f024fef56f7931dbedca62852bab47a2e1dd51e2e69a94547a58e441bb5489e"
+  },
+  "id": "UpN5QHpQQgWGeD1B",
+  "tags": []
+}
