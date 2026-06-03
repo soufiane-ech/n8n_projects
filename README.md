@@ -1,6 +1,6 @@
 # n8n Automation Projects Showcase
 
-Ce dépôt rassemble une collection de workflows d'automatisation **n8n** professionnels, prêts à être déployés. Ils illustrent comment combiner l'orchestration de données, le scraping, l'intelligence artificielle et les outils de productivité (Google Workspace, APIs externes) pour répondre à des cas d'usage métiers concrets.
+Ce dépôt regroupe une collection de workflows **n8n** opérationnels, prêts à être déployés pour répondre à des cas d'usage métiers concrets.
 
 ## Projets inclus
 
